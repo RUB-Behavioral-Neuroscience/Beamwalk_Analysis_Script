@@ -1,0 +1,70 @@
+ ---
+title: "Correcting Outliers - R Notebook"
+output:
+  html_notebook: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+    
+author: Dennis Piotrowski
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r}
+#General procedure
+#I know it is tedious to select every folder to correct one after another. I might change this in the future, but first I need to add some features to the main script (and possiblyfix some bugs). Also the outlier correction itself might need to be improved. 
+
+source(choose.files(caption = "Choose the correcting data R script", multi = FALSE)) #You could also change this to a fixed path to the file to make the progress go faster, just make sure to include \\ like her "D:\\Meine Downloads\\filename.fileextension"
+
+video_file_extension <- ".mts" #Change this to .mp4, .avi or other file types the videos are encoded in
+
+
+data_dir <- choose.dir(caption = "Choose directory with data to be corrected")
+
+rows_to_skip_inside_csv_file <- 3L #Open a filtered uncorrected .csv file with the default windows editor. Count the rows until the first points of data then use that number here. The L indicates R that this will always be an integer.
+
+###Nothing needs to be changed below here###
+
+#data_dir
+setwd(data_dir)
+
+filenames <- gsub(pattern = "\\.csv$", "", list.files(path = data_dir, pattern = "*filtered.csv")) #filtered needs to be removed later on, but I didn't want to catch unfiltered ones, too. #|^corrected\\_
+
+#filenames
+
+names <- gsub(pattern = paste0("\\", video_file_extension, ".*?_filtered"), "", filenames, ignore.case = TRUE) #To remove the whole junk after the original file name attached by DeepLabCut. \\ ignores everything before the .mts and .*? removes everything between .mts and _filtered
+
+#names
+
+names <- gsub(pattern = "\\DLC_resnet.*?_filtered", "", names, ignore.case = TRUE) #Again everything before \\ is ignored and everything between (and including) DLC_resnet and _fitered will be removed. Both gsub() functions could also be nested, or you could also use a | between the patterns like "\\.mts.*?_filtered|\\DLC_resnet.*?_filtered"
+
+#names <- gsub(pattern = "^corrected\\_", "", names)
+
+#names #Here, clear names should be seen, e.g. 12137_17_05_22_(1)
+
+
+
+load_dependencies() #The raster library/package
+
+
+i <- 0
+
+for(i in 1:length(filenames)) {
+    define_everything(data_dir, filenames[i], rows_to_skip_inside_csv_file)
+    calculate_distances()
+    calculate_vectors()
+    define_limits()
+    remove_outliers()
+    #try_plotting_corrected_data() #Does work, but is unnecessary, lags, slows everything down and clutters the output.
+    create_csvs(names[i])
+    
+    print(paste("Done with", names[i]))
+    next #i = i + 1
+}
+
+print("Done")
+```
+

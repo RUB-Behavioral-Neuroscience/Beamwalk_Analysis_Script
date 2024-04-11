@@ -1,0 +1,204 @@
+---
+title: "Beamwalk Analysis Script - R Notebook"
+output:
+  html_notebook: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+    
+author: Dennis Piotrowski
+editor_options: 
+  chunk_output_type: inline
+---
+
+#General procedure
+#
+#First data must be stored in .csv files ideally created by the mass outlier correction script. It must be named after this scheme "mousenumber_date_of_recording_(trialnumber)" like "number_dd_mm_yy_(number)" e.g. 12440_21_06_22_(1). Furthermore, it needs a "corrected_" in the beginning which is created by the mass outlier script. So file names must be like corrected_12440_21_06_22_(1).csv
+#The mouse number/animal ID needs to be written as a number with at least 3 digits. If the number is only 1 digit consider using zeros like so: 001. This number can not be identical within two group (e.g. two groups of treatment sharing the number e.g. 00025)
+#Then you can run the first part of this script. You will be prompted to select a file as a source, which is the .r script, probably named "Analysis_functions.r", Then you will be prompted to select the directory for each group of mice, here called control, sca6 and sca6/84q. Files named after the scheme above will be picked from these directories and then are turned into data frames and lists of data frames. For example, `12440_21_06_22_(1)` (or `12440_21_06_22`[1]) will be a data frame of that trial and `12440_21_06_22` will be a list of data frames containing all trials of that mouse on that date. Additionally, there exists a full data frame list for each group of mice.
+#Further variables are:
+#num_mice_total -> total number of mice #Each Subgroup and Group have their own num_mice assigned after the first block of code is run
+#back_left_paw_x -> back left paw x-coordinates column. In fact, all body parts (and markings) have their column assigned as an integer variable so that one does not need to count.
+#back_left_paw_y -> back left paw y-coordinates column. Also applies to the y-coordinates. The only columns that are not assigned a separate variable are the likelihoods.
+#frame_c -> frame column. This is the only column not named after the header due to reasons.
+#Use them, for example, as followed: plot(`12440_21_06_22`[[1]][,back_left_paw_y] ~ `12440_21_06_22`[[1]][,frame_c]) or use the $ sign and the column name as followed plot(`12440_21_06_22`[[1]]$back_left_paw_y ~ `12440_21_06_22`[[1]]$frame)
+
+#Further functions and example use cases:
+
+#Remove most special characters (all seen in the name below and replaced with an underscore)
+#special_character_test_name <- "th!$ i²³s is t=)==&°ott§{}]a[??ll*+~'#y a,;. \"n-_a@m|€e\" \ `^^´ßüöäµ"
+#all_to_underscore(special_character_test_name) -> "th___i__s_is_t______ott____a___ll_____y_a_____n__a_m__e_______ßüöäµ"
+
+#search_dataframe(all_data_frames, `7695_22_03_22_(3)`) #gives the index of the right dataframe when its inside the the left dataframe (e.g. index 131)
+
+#random_data_frames(data_frames_of_group_sca6_control_p1, percentage = 0.2) #0.2 equals 20% of the given dataframe
+#random_dataframes #basically a dataframe, where the first column shows you the index of the dataframe in the given dataframe (in this case data_frames_of_group_sca6_control_p1) and the second column shows you the name. These can than be sampled by you as followed.
+#random_dataframes <- data_frames_of_group_sca6_control_p1[random_dataframes[,1]]
+
+#convert_RDS_into_csv(rds_file) #Converts an .RDS file into several .csv files 
+
+#How to use this script after running the first block of code
+#
+#For lists of data frames use dataframe[[listnumber]][columnnumber] to call specific columns from a certain data frame in that list. For example `12440_21_06_22`[[1]][2] to call for data frame 12440_21_06_22 list 1 column 2. For plots one need to use `12440_21_06_22`[[1]][,2], otherwise R can't access column 2. (The basic structure of a data frame is after all df[rows, columns].) The `` are important, otherwise R wouldn't recognize the number as a variable name.
+
+
+
+#Disclaimer: Keep in mind, the whole script only works if the files are named correctly and when they are created by the mass correcting outliers script. Otherwise functions need modifications.
+
+
+#Initiation
+```{r}
+source(choose.files(caption = "Choose the main R script", multi = FALSE)) #Select during the prompt the main R script
+
+#While it is not mandatory for slip detection and plotting graphs and the like. However, one can still use additional tables, such as one containing all mice with their gender, age, and so on.
+
+group_names <- c("SCA6 Control", "SCA6 Treatment") #Spaces and other special characters should be omitted or exchanged with _
+#The folders in which the groups are contained can contain subfolders for subgroups. If so, the Corrected_Data folders should always be in the according subfolders (although one Corrected_Data folder outside the subfolder would be fine and count as having no subgroup). However you cannot have subfolders and corrected_ .csv files in the chosen group directory. Meta_Data folders will be ignored.
+
+fps <<- 50 #Set frames per second here.
+res1 <<- 1920 #Change here the resolution of the recordings. (Horizontal pixels)
+res2 <<- 1080 #Change here the resolution of the recordings. (Vertical pixels)
+#This is currently not variable between files, so if files do not have the same FPS or resolution the data at the end will be wrong. In these cases the data analysis must be separated into groups with equal resolution and FPS. I'm planning to fix this (using the added empty columns at the end of the automatically created main_table, that when filled, will replace these default values, for that trial). It will take time, because it didn't cross my mind until right at the end.
+
+
+resolution <- list(rep(1:res1, 1),rep(1:res2, 1))
+
+beam_width_cm <<- 1 #Part, where mice walks on
+beam_length_cm <<- 63
+beam_height_cm <<- 2
+
+#Outer markings are a set of points in our newest DLC model. I will, probably remove them in the near future, because they are of no use. But since I need to publish this code soon, I will leave it in for now.
+inner_marking_distance_cm <<- 39 #Distance between the two inner markings in cm
+flm_lm_distance_cm <<- 5 #Distance between outer left and inner left marking in cm
+frm_rm_distance_cm <- 5 #Distance between outer left and inner left marking in cm
+flm_from_top_cm <<- 0.9 #Distance between the top of the beam and the outer left marking in cm
+lm_from_top_cm <<- 1.4 #Distance between the top of the beam and the inner left marking in cm
+rm_from_top_cm <- 1.4 #Distance between the top of the beam and the inner right marking in cm
+frm_from_top_cm <<- 0.9 #Distance between the top of the beam and the outer right marking in cm
+outer_marking_distance_cm <<- inner_marking_distance_cm + flm_lm_distance_cm + frm_rm_distance_cm #Distance between the two outer markings in cm
+
+#read_all_files_into_environment() #if you have already run the slip_detection function and have saved all the files, this command allows you to load all the files in the current working environment. Note that you will be prompted to select a folder where the files are stored if no directory is given. Put it right at the end of this block of code just above the print("Done")
+
+### Nothing needs to be changed from here on out ### (Well, in the ideal case at least) ###
+################################################################################################################################################################################
+
+print("A window should have popped up. Prompting you to select the folder containing all groups.")
+directory_to_data_files <- choose.dir(caption = "Choose the main directory containing all groups")
+
+paths <- list()
+
+print("A window should have popped up. Prompting you to select the folder containing the individual groups.")
+for(j in 1:length(group_names))
+{
+    #Choose directory where all files or subfolders are included for each Group (There is for some reason a very strict character limit for caption, like 39 characters)
+    
+    #The first subfolder in these chosen directories will be chosen to be the sub group name
+    paths[j] <- choose.dir(default = directory_to_data_files, caption = paste0("Choose directory for: ", group_names[j]))
+}
+
+#Create main table inside function
+prepare_everything_1(directory_to_data_files, group_names, paths)
+
+prepare_everything_2(directory_to_data_files, all_data_frames, variable_name_save, main_table)
+
+#gctorture(FALSE) #If R becomes incredible slow, deactivating this helps out. Well, at least that was an answer I found online. Clearing the Console and such will be more effective.
+
+#(.packages()) #Is handy for seeing every currently loaded packages
+
+#read_all_files_into_environment(directory_to_data_files) #Leave empty if the saved files are elsewhere to choose, or enter different path
+
+print("Done")
+```
+
+
+
+#Slip detection
+```{r}
+#The slip_detection function also calculates body area and the tail angle
+
+slip_detection(main_table, all_data_frames, back_left_paw_x, back_left_paw_y, visualize_results = FALSE, be_vocal = TRUE, save_files = FALSE, directly_read_files = FALSE, try_reverse_ratio_plotting = FALSE)
+
+#Some examples:
+#slip_detection(main_table, all_data_frames[1:2], back_left_paw_x, back_left_paw_y, visualize_results = FALSE, be_vocal = TRUE, save_files = FALSE, directly_read_files = TRUE, try_reverse_ratio_plotting = FALSE)
+
+#slip_detection(main_table, data_frames_of_group_sca6_control_p1, back_left_paw_x, back_left_paw_y, visualize_results = FALSE, be_vocal = TRUE, save_files = TRUE, directly_read_files = TRUE, try_reverse_ratio_plotting = FALSE)
+
+#Example with the least amount of arguments necessary: slip_detection(main_table, all_data_frames, back_left_paw_x, back_left_paw_y)
+```
+
+#gg_box_plots
+```{r}
+gg_box_plots_after_slip_detection(slip_detection_list, main_table, take_mean_of_mice = TRUE, normal_distribution = FALSE, plot_group_comparison = TRUE, save_as_filetype = NULL, multiple_correction_method = "holm", only_plot_comparing_boxplots = TRUE)# paired_data = TRUE) #Data is paired within each group not between each group, hence paired_data = TRUE will result in an error because x and y are of unequal length.
+#, save_as_filetype = ".svg"
+
+#p_value_list
+```
+
+#gg_reverse_ratio_density
+```{r}
+working_directory <- getwd() #The folder you want the graphs to be saved in
+
+#gg_reverse_ratio_density(reverse_ratio, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, only_plot_comparing_boxplots = TRUE, coord_xlim = c(-500, 500)) #, custom_breaks_x_axis = c(seq(-80, 0, 40))
+
+#setwd(working_directory) #setwd() within the function will not work in this case
+
+#gg_reverse_ratio_density(reverse_ratio_blp, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_blp, main_table,remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(reverse_ratio_flp, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_flp, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, custom_breaks_x_axis = c(-50, -25, 0, 25, 50), only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(reverse_ratio_bel, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_bel, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(reverse_ratio_bac, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_bac, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, custom_breaks_x_axis = c(90, 120, 150, 180, 210), only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(reverse_ratio_snt, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_snt, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = NULL, save_for_publication = FALSE, custom_breaks_x_axis = c(0, 25, 50), only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(reverse_ratio_le, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_le, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(reverse_ratio_tb, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_tb, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(reverse_ratio_tc, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_tc, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, custom_breaks_x_axis = c(seq(-200, 400, 100)), only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(reverse_ratio_tt, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(reverse_ratio_tt, main_table, remove_stationary_phases = TRUE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, custom_breaks_x_axis = c(seq(-400, 500, 200)), only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+
+#gg_reverse_ratio_density(tb_to_tt_angle, main_table, remove_stationary_phases = FALSE)
+gg_reverse_ratio_density(tb_to_tt_angle, main_table, remove_stationary_phases = TRUE, plot_title = "Angle at tail base", x_axis_title = "Angle [°]", plot_vertical_zero_line = FALSE, save_as_svg = FALSE, directory = working_directory, save_for_publication = FALSE, custom_breaks_x_axis = c(seq(0, 360, 90)), only_plot_comparing_boxplots = TRUE)
+
+#setwd(working_directory)
+```
+
+#Researcher vs. BAS Comparison
+```{r}
+#For this function to work you need to create your own dataframe containing your scores, as well as the BAS scores. That why you need to give the function the index of the needed column, as well as their names.
+
+#researcher_vs_BAS_function()
+```
+
