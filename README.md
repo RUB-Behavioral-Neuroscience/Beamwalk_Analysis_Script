@@ -1,6 +1,6 @@
 # Beamwalk Analysis Script (BAS)
 
-These scripts are part of the following publication: insert_link_here
+These scripts are part of the following publication: https://www.nature.com/articles/s41598-024-59187-0
 
 The beamwalk analysis script (BAS) counts and classifies minor and major hindpaw slips, as well as a more in depth analysis by visualizing the ratio relative to the top of the beam for each tracked body part by DeepLabCut (DLC). The main script automatically detects the correct .csv files for the analysis and generates a main_table containing all trials. The gg_box_plots_after_slip_detection and gg_reverse_ratio_density functions are highly customizable and automatically plot each group and subgroup against each other while also providing p-values that are saved inside an additional data frame. Further useful functions are provided, such as replacing all common special characters with underscores. So these files are worth a look even if you don't want to analyze data with them. So take as much inspiration from it as you want. But be aware, the code most likely does not follow conventional code formatting/linting, as I did not know that was a thing while I was working on it. But I tried to make it as humanly readable as possible. For me, this code is the most readable but I understand that others will have trouble understanding it. So do not hesitate to ask questions on how something works!
 

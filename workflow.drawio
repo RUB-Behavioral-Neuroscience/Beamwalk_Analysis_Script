@@ -1,0 +1,82 @@
+<mxfile host="65bd71144e">
+    <diagram id="H3tnomoDhOJxsfFKKW_9" name="Page-1">
+        <mxGraphModel dx="703" dy="470" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="140" pageHeight="150" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="39" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="10" y="10" width="544" height="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="" style="group" vertex="1" connectable="0" parent="39">
+                    <mxGeometry width="544" height="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;u&gt;Workflow&lt;/u&gt;&lt;/font&gt;&lt;/span&gt;" style="swimlane;childLayout=stackLayout;horizontal=1;fillColor=none;horizontalStack=1;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;strokeColor=none;stackBorder=10;stackSpacing=-12;resizable=1;align=center;points=[];whiteSpace=wrap;html=1;fillStyle=solid;fontFamily=Times New Roman;fontColor=#000000;" vertex="1" parent="35">
+                    <mxGeometry width="544" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="&lt;div&gt;Retrieve filtered&lt;/div&gt;&lt;div&gt;.csv-file from&lt;/div&gt;&lt;div&gt;DeepLabCut&lt;/div&gt;" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;fillStyle=solid;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="3">
+                    <mxGeometry x="10" y="33" width="140" height="67" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="&lt;div&gt;Use outlier&lt;/div&gt;&lt;div&gt;correction script in&lt;/div&gt;&lt;div&gt;R Studio or other IDE&lt;/div&gt;" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;fillStyle=solid;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="3">
+                    <mxGeometry x="138" y="33" width="140" height="67" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="&lt;div&gt;Read-in and analyze&lt;/div&gt;&lt;div&gt;corrected .csv-file&lt;/div&gt;&lt;div&gt;with the main script&lt;/div&gt;" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;fillStyle=solid;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="3">
+                    <mxGeometry x="266" y="33" width="140" height="67" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="&lt;div&gt;Optionally generate&lt;/div&gt;&lt;div&gt;graphs with the&lt;/div&gt;&lt;div&gt;main script&lt;/div&gt;" style="shape=step;perimeter=stepPerimeter;fixedSize=1;points=[];whiteSpace=wrap;html=1;fillStyle=solid;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="3">
+                    <mxGeometry x="394" y="33" width="140" height="67" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="&lt;b&gt;Tracked Points include:&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#FFFFFF;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;labelBackgroundColor=#FFFFFF;fillStyle=solid;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;" vertex="1" parent="35">
+                    <mxGeometry x="10" y="160" width="140" height="196" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;div&gt;Left Eye, Right Eye, Snout, Belly, Back,&amp;nbsp;&lt;/div&gt;&lt;div&gt;Left Fore Paw,&lt;/div&gt;&lt;div&gt;Right Fore Paw,&amp;nbsp;&lt;/div&gt;&lt;div&gt;Left Hind Paw,&amp;nbsp;&lt;/div&gt;&lt;div&gt;Right Hind Paw,&amp;nbsp;&lt;/div&gt;&lt;div&gt;Tail Base, Center &amp;amp; Tip,&lt;/div&gt;&lt;div&gt;Left (Stop) Marking,&lt;/div&gt;&lt;div&gt;Right (Start) Marking,&lt;/div&gt;&lt;div&gt;Left Beam Top,&amp;nbsp;&lt;/div&gt;&lt;div&gt;Right Beam Top&lt;/div&gt;" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;labelBackgroundColor=#FFFFFF;fillStyle=solid;fontFamily=Times New Roman;fontColor=#000000;" vertex="1" parent="11">
+                    <mxGeometry y="26" width="140" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="&lt;b&gt;Raw Statistical Values&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#FFFFFF;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;labelBackgroundColor=#FFFFFF;fillStyle=solid;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;" vertex="1" parent="35">
+                    <mxGeometry x="160" y="160" width="226" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Mean &amp;amp; Standard Error of Mean&lt;/font&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Number of Mice (N)&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Number of Trials (ntrials)&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Number of Frames (nframes)&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;p-Values of a few Statical Tests&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Velocity&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;labelBackgroundColor=#FFFFFF;fillStyle=solid;fontFamily=Times New Roman;fontColor=#000000;" vertex="1" parent="15">
+                    <mxGeometry y="26" width="226" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="" style="group" vertex="1" connectable="0" parent="35">
+                    <mxGeometry x="394" y="160" width="140" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="&lt;b&gt;Potential Graphics&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#FFFFFF;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;labelBackgroundColor=#FFFFFF;fillStyle=solid;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;container=0;" vertex="1" parent="25">
+                    <mxGeometry width="140" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="&lt;div style=&quot;&quot;&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;Line of Walking Pattern&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;Boxplots &amp;amp;&amp;nbsp;Density Plots of&amp;nbsp; analytical&amp;nbsp; &amp;nbsp;components&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;with&amp;nbsp; statistical&amp;nbsp; &amp;nbsp;tests&amp;nbsp; &amp;nbsp;and&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;p-Values&lt;/div&gt;" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;labelBackgroundColor=#FFFFFF;fillStyle=solid;fontFamily=Times New Roman;fontColor=#000000;" vertex="1" parent="25">
+                    <mxGeometry y="26" width="140" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="" style="endArrow=classic;html=1;fontFamily=Times New Roman;fontSize=11;fontColor=#000000;strokeColor=#000000;" edge="1" parent="35" source="9" target="23">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="420" y="230" as="sourcePoint"/>
+                        <mxPoint x="470" y="160" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="31" value="" style="endArrow=classic;html=1;fontFamily=Times New Roman;fontSize=11;fontColor=#000000;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" parent="35" target="11">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="80" y="100" as="sourcePoint"/>
+                        <mxPoint x="80" y="160" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="32" value="" style="endArrow=classic;html=1;fontFamily=Times New Roman;fontSize=11;fontColor=#000000;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.456;exitY=1.013;exitDx=0;exitDy=0;exitPerimeter=0;strokeColor=#000000;" edge="1" parent="35" source="10" target="15">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="340" y="110" as="sourcePoint"/>
+                        <mxPoint x="484" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="40" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=11;fontColor=#000000;" edge="1" parent="35" source="4" target="11">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="" style="group" vertex="1" connectable="0" parent="39">
+                    <mxGeometry x="160" y="290" width="226" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Compare BAS to Researcher&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Major Slip Score&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Minor Slip Score&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;Probability of tracked body part displacement&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Tail Base Angle&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Detect Stationary Phases&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Animal Size&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;labelBackgroundColor=#FFFFFF;fillStyle=solid;fontFamily=Times New Roman;fontColor=#000000;container=1;" vertex="1" parent="38">
+                    <mxGeometry y="26" width="226" height="114" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="&lt;b&gt;Analytical Components&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#FFFFFF;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;labelBackgroundColor=#FFFFFF;fillStyle=solid;strokeColor=#000000;fontFamily=Times New Roman;fontColor=#000000;" vertex="1" parent="38">
+                    <mxGeometry width="226" height="140" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

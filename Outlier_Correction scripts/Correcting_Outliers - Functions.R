@@ -1,5 +1,6 @@
-load_dependencies <- function (){
-    ###Added after M.Sc. thesis###
+load_dependencies <- function ()
+{
+
     if(!isTRUE("raster" %in% (.packages())))
     {
         if(!require(raster))
@@ -8,7 +9,6 @@ load_dependencies <- function (){
         }
         suppressPackageStartupMessages(library(raster)) #needed for example for the pointDistance() function
     }
-    ###End of Addtion after M.Sc. thesis###
 }
 
 
@@ -50,8 +50,6 @@ define_everything <- function(data_dir, filename, skipped_rows){
     mark_left <- cbind(data$mark_left_x, data$mark_left_y)
     mark_far_right <- cbind(data$mark_far_right_x, data$mark_far_right_y)
     mark_right <- cbind(data$mark_right_x, data$mark_right_y)
-    
-    ###Added after M.Sc. thesis###
 
     left_beam_top <- cbind(data$top_beam_left_x,data$top_beam_left_y)
     middle_beam_top <- cbind(data$top_beam_middle_x,data$top_beam_middle_y)
@@ -60,8 +58,6 @@ define_everything <- function(data_dir, filename, skipped_rows){
     left_beam_bottom <- cbind(data$bottom_beam_left_x,data$bottom_beam_left_y)
     middle_beam_bottom <- cbind(data$bottom_beam_middle_x,data$bottom_beam_middle_y)
     right_beam_bottom <- cbind(data$bottom_beam_right_x,data$bottom_beam_right_y)
-    
-    ###End of Addtion after M.Sc. thesis###
     
     
     #Creating vectors and such for measuring distances between two points either over time (the vec_ ones) or between two different sets of points (the distance_ ones)
@@ -85,14 +81,12 @@ define_everything <- function(data_dir, filename, skipped_rows){
     vec_len_mr <- c()
     vec_len_mfr <- c()
     
-    ###Added after M.Sc. thesis###
     vec_len_lbt <- c()
     vec_len_mbt <- c()
     vec_len_rbt <- c()
     vec_len_lbb <- c()
     vec_len_mbb <- c()
     vec_len_rbb <- c()
-    ###End of Addtion after M.Sc. thesis###
     
     test3 <- list(vec_len_le,vec_len_re,vec_len_snout,vec_len_belly,vec_len_back,vec_len_flp,vec_len_frp,vec_len_blp,vec_len_brp,vec_len_tb,vec_len_tc,vec_len_tt,vec_len_mfl,vec_len_ml,vec_len_mr,vec_len_mfr,vec_len_lbt,vec_len_mbt,vec_len_rbt,vec_len_lbb,vec_len_mbb,vec_len_rbb)
     names(test3) <- c("vec_len_le","vec_len_re","vec_len_snout","vec_len_belly","vec_len_back","vec_len_flp","vec_len_frp","vec_len_blp","vec_len_brp","vec_len_tb","vec_len_tc","vec_len_tt","vec_len_mfl","vec_len_ml","vec_len_mr","vec_len_mfr","vec_len_lbt","vec_len_mbt","vec_len_rbt","vec_len_lbb","vec_len_mbb","vec_len_rbb")
@@ -123,10 +117,8 @@ calculate_distances <- function(){
     distance_left <- pointDistance(mark_far_left, mark_left, lonlat =FALSE)
     distance_right <- pointDistance(mark_far_right, mark_right, lonlat =FALSE)
     
-    ###Added after M.Sc. thesis###
     distance_beam_top <- pointDistance(left_beam_top, right_beam_top, lonlat =FALSE)
     distance_beam_bottom <- pointDistance(left_beam_bottom, right_beam_bottom, lonlat =FALSE)
-    ###End of Addtion after M.Sc. thesis###
     
     test2 <- list(distance_body,distance_bodyheight,distance_paws,distance_tail, distance_left,distance_right,distance_beam_top,distance_beam_bottom)
     names(test2) <- c("distance_body","distance_bodyheight","distance_tail","distance_paws","distance_left","distance_right","distance_beam_top","distance_beam_bottom")
@@ -171,14 +163,12 @@ calculate_vectors <- function(){
         vec_len_mfr[j] <- sqrt(((mark_far_right[j,1]-mark_far_right[j-1,1])^2)+((mark_far_right[j,2]-mark_far_right[j-1,2])^2))
         
         
-        ###Added after M.Sc. thesis###
         vec_len_lbt[j] <- sqrt(((left_beam_top[j,1]-left_beam_top[j-1,1])^2)+((left_beam_top[j,2]-left_beam_top[j-1,2])^2))
         vec_len_mbt[j] <- sqrt(((middle_beam_top[j,1]-middle_beam_top[j-1,1])^2)+((middle_beam_top[j,2]-middle_beam_top[j-1,2])^2))
         vec_len_rbt[j] <- sqrt(((right_beam_top[j,1]-right_beam_top[j-1,1])^2)+((right_beam_top[j,2]-right_beam_top[j-1,2])^2))
         vec_len_lbb[j] <- sqrt(((left_beam_bottom[j,1]-left_beam_bottom[j-1,1])^2)+((left_beam_bottom[j,2]-left_beam_bottom[j-1,2])^2))
         vec_len_mbb[j] <- sqrt(((middle_beam_bottom[j,1]-middle_beam_bottom[j-1,1])^2)+((middle_beam_bottom[j,2]-middle_beam_bottom[j-1,2])^2))
         vec_len_rbb[j] <- sqrt(((right_beam_bottom[j,1]-right_beam_bottom[j-1,1])^2)+((right_beam_bottom[j,2]-right_beam_bottom[j-1,2])^2))
-        ###End of Addtion after M.Sc. thesis###
         
         next #j = j+1
     }
@@ -260,7 +250,6 @@ define_limits <- function(){
     up_lim_mark <-  ((median(distance_left,na.rm = TRUE)+median(distance_right,na.rm = TRUE))/2)*1.2
     low_lim_mark <- ((median(distance_left,na.rm = TRUE)+median(distance_right,na.rm = TRUE))/2)*0.8
     
-    ###Added after M.Sc. thesis###
     up_lim_vec_len_lbt <- median(vec_len_lbt,na.rm = TRUE)+10
     up_lim_vec_len_mbt <- median(vec_len_mbt,na.rm = TRUE)+10
     up_lim_vec_len_rbt <- median(vec_len_rbt,na.rm = TRUE)+10
@@ -275,7 +264,6 @@ define_limits <- function(){
     
     up_lim_distance_beam_bottom <- median(distance_beam_bottom,na.rm = TRUE)*1.2
     low_lim_distance_beam_bottom <- median(distance_beam_bottom,na.rm = TRUE)*0.8
-    ###End of Addtion after M.Sc. thesis###
     
     
     test4 <- list(up_lim_vec_len_le,low_lim_vec_len_le,up_lim_vec_len_re,low_lim_vec_len_re,up_lim_vec_len_snout,low_lim_vec_len_snout,up_lim_vec_len_belly,low_lim_vec_len_belly,up_lim_vec_len_back,low_lim_vec_len_back,up_lim_vec_len_flp,low_lim_vec_len_flp,up_lim_vec_len_frp,low_lim_vec_len_frp,up_lim_vec_len_blp,low_lim_vec_len_blp,up_lim_vec_len_brp,low_lim_vec_len_brp,up_lim_vec_len_tb,low_lim_vec_len_tb,up_lim_vec_len_tc,low_lim_vec_len_tc,up_lim_vec_len_tt,low_lim_vec_len_tt,up_lim_mark_vec,low_lim_mark_vec,up_lim_bod,low_lim_bod,up_lim_bodh,low_lim_bodh,up_lim_paws,low_lim_paws,up_lim_tail,low_lim_tail,up_lim_mark,low_lim_mark,up_lim_vec_len_lbt,up_lim_vec_len_mbt,up_lim_vec_len_rbt,up_lim_vec_len_lbb,up_lim_vec_len_mbb,up_lim_vec_len_rbb,low_lim_beam,up_lim_distance_beam_top,low_lim_distance_beam_top,up_lim_distance_beam_bottom,low_lim_distance_beam_bottom)
@@ -396,7 +384,6 @@ remove_outliers <- function() {
         
         #print(paste0("vec_len_lbt[k] ", vec_len_lbt[k], " up_lim_vec_len_lbt ", up_lim_vec_len_lbt, " low_lim_beam ", low_lim_beam, " data$top_beam_left_like[k] ", data$top_beam_left_like[k], " p_cut_off ", p_cut_off))
         
-        ###Added after M.Sc. thesis###
         if(vec_len_lbt[k] > up_lim_vec_len_lbt || vec_len_lbt[k] < low_lim_beam || is.na(vec_len_lbt[k]) || data$top_beam_left_like[k] < p_cut_off) {
             vec_len_lbt[k] <- NA
             data$top_beam_left_x[k] <- NA
@@ -427,7 +414,6 @@ remove_outliers <- function() {
             data$bottom_beam_right_x[k] <- NA
             data$bottom_beam_right_y[k] <- NA
         }
-        ###End of Addtion after M.Sc. thesis###
         
         
         #Beam walk (distance)
@@ -438,14 +424,12 @@ remove_outliers <- function() {
             distance_right[k] <- NA
         }
         
-        ###Added after M.Sc. thesis###
         if(distance_beam_top[k] > up_lim_distance_beam_top || distance_beam_top[k] < low_lim_beam || is.na(distance_beam_top[k]) || data$top_beam_left_like[k] < p_cut_off || data$top_beam_right_like[k] < p_cut_off) {
             distance_beam_top[k] <- NA
         }
         if(distance_beam_bottom[k] > up_lim_distance_beam_bottom || distance_beam_bottom[k] < low_lim_beam || is.na(distance_beam_bottom[k]) || data$bottom_beam_right_like[k] < p_cut_off || data$bottom_beam_right_like[k] < p_cut_off) {
             distance_beam_bottom[k] <- NA
         }
-        ###End of Addtion after M.Sc. thesis###
         
         #End of checking
         next #k = k+1
