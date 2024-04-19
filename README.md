@@ -20,4 +20,4 @@ Feel free to approach me for any kind of feedback!
 
 [def]: https://github.com/RUB-Behavioral-Neuroscience/Beamwalk_Analysis_Script/blob/main/workflow.svg
 
-[def2]: https://www.nature.com/articles/s41598-024-59187-0/figures/1
+[def2]: https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41598-024-59187-0/MediaObjects/41598_2024_59187_Fig1_HTML.png
